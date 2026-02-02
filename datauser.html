@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data User - Vaultix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00D2FF;
+            --accent: #A855F7;
+            --dark: #0F0F23;
+            --darker: #0A0A15;
+            --light: #FFFFFF;
+            --gray: #9CA3AF;
+            --success: #10B981;
+            --warning: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        nav {
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(108, 92, 231, 0.2);
+            border-radius: 16px;
+            padding: 20px 30px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(108, 92, 231, 0.2);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        .auth-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 60px auto;
+            align-items: center;
+        }
+
+        .auth-card {
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 12px 40px rgba(245, 158, 11, 0.2);
+            animation: slideIn 0.6s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .brand-tag {
+            color: var(--warning);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--light), var(--warning));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--warning);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+        }
+
+        .link-text {
+            color: var(--warning);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .link-text:hover {
+            color: var(--secondary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--warning), #F97316);
+            border: none;
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(245, 158, 11, 0.6);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            color: var(--gray);
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: rgba(245, 158, 11, 0.3);
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        .social-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .social-btn {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 10px;
+            color: var(--light);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn:hover {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .visual-side {
+            animation: slideIn 0.6s ease 0.3s both;
+        }
+
+        .visual-container {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-mockup {
+            width: 280px;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(245, 158, 11, 0.3));
+            border-radius: 40px;
+            border: 4px solid var(--warning);
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(245, 158, 11, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-notch {
+            width: 100px;
+            height: 25px;
+            background: var(--dark);
+            border-radius: 0 0 20px 20px;
+            margin: 0 auto 10px;
+        }
+
+        .phone-content {
+            background: rgba(15, 15, 35, 0.9);
+            border-radius: 25px;
+            height: calc(100% - 35px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .user-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--success), var(--warning));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.6);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 40px rgba(245, 158, 11, 0.6);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 60px rgba(245, 158, 11, 0.9);
+            }
+        }
+
+        .phone-text {
+            text-align: center;
+        }
+
+        .phone-text h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--warning);
+        }
+
+        .phone-text p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        body.light-theme {
+            --dark: #F3F4F6;
+            --darker: #FFFFFF;
+            --light: #1F2937;
+            --gray: #6B7280;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F3F4F6 100%);
+            color: #1F2937;
+        }
+
+        body.light-theme .bg-animation {
+            opacity: 0.08;
+        }
+
+        body.light-theme nav,
+        body.light-theme .auth-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        body.light-theme input {
+            background: rgba(243, 244, 246, 0.5);
+            color: #1F2937;
+        }
+
+        body.light-theme .phone-mockup {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(245, 158, 11, 0.2));
+        }
+
+        body.light-theme .phone-content {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        @media (max-width: 1024px) {
+            .auth-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <script>
+        // Apply theme on page load
+        (function() {
+            const savedTheme = localStorage.getItem('vaultixTheme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+            }
+        })();
+    </script>
+    
+    <div class="container">
+        <nav>
+            <div class="logo" onclick="window.location.href='index.html'">VAULTIX</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dataowner.html">Data Owner</a></li>
+                <li><a href="datauser.html">Data User</a></li>
+                <li><a href="trustauthority.html">Trust Authority</a></li>
+                <li><a href="cloud.html">Cloud</a></li>
+            </ul>
+        </nav>
+
+        <section class="auth-section">
+            <div class="auth-card">
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <div class="brand-tag">• DATA USER</div>
+                    <h2>Access Data</h2>
+                    <p class="subtitle">Request access to encrypted cloud data</p>
+                    
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="loginEmail" placeholder="user@vaultix.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="loginPassword" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                            <span style="margin-left: auto; cursor: pointer;" class="link-text">Forgot Password?</span>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Sign In</button>
+                    </form>
+                    
+                    <div class="toggle-form">
+                        Don't have an account? <span class="link-text" onclick="toggleForms()">Sign Up</span>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="hidden">
+                    <div class="brand-tag">• DATA USER</div>
+                    <h2>Create Account</h2>
+                    <p class="subtitle">Join to access shared data</p>
+                    
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="regName" placeholder="Jane Smith" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="regEmail" placeholder="user@vaultix.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="regPassword" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="regConfirmPassword" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">I agree to <span class="link-text">Terms of Service</span> and <span class="link-text">Privacy Policy</span></label>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Sign Up</button>
+                    </form>
+                    
+                    <div class="divider">Or continue with</div>
+                    
+                    <div class="social-btns">
+                        <button class="social-btn">
+                            <span>🔷</span> Google
+                        </button>
+                        <button class="social-btn">
+                            <span>📘</span> Facebook
+                        </button>
+                    </div>
+                    
+                    <div class="toggle-form">
+                        Already have an account? <span class="link-text" onclick="toggleForms()">Sign In</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="visual-side">
+                <div class="visual-container">
+                    <div class="phone-mockup">
+                        <div class="phone-notch"></div>
+                        <div class="phone-content">
+                            <div class="user-icon">👥</div>
+                            <div class="phone-text">
+                                <h3>Data User Portal</h3>
+                                <p>Request and access shared data with Trust Authority verification</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function toggleForms() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            
+            loginForm.classList.toggle('hidden');
+            registerForm.classList.toggle('hidden');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Store user data
+            const userData = {
+                email: email,
+                role: 'user',
+                name: 'Data User',
+                loginTime: new Date().toISOString()
+            };
+            
+            localStorage.setItem('vaultixUser', JSON.stringify(userData));
+            
+            // Redirect to dashboard
+            window.location.href = 'user-dashboard.html';
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // Store user data
+            const userData = {
+                email: email,
+                role: 'user',
+                name: name,
+                loginTime: new Date().toISOString()
+            };
+            
+            localStorage.setItem('vaultixUser', JSON.stringify(userData));
+            
+            // Redirect to dashboard
+            window.location.href = 'user-dashboard.html';
+        }
+    </script>
+</body>
+</html>

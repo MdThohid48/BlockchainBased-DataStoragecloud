@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaultix - Blockchain-Based Cloud Storage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00D2FF;
+            --accent: #A855F7;
+            --dark: #0F0F23;
+            --darker: #0A0A15;
+            --light: #FFFFFF;
+            --gray: #9CA3AF;
+            --success: #10B981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(108, 92, 231, 0.2);
+            border-radius: 16px;
+            padding: 20px 30px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(108, 92, 231, 0.2);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .settings-icon {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .settings-icon:hover {
+            transform: rotate(90deg);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            min-height: calc(100vh - 200px);
+            padding: 40px 0;
+        }
+
+        .hero-content h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: var(--gray);
+            margin-bottom: 40px;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--light);
+            padding: 18px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(108, 92, 231, 0.4);
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(108, 92, 231, 0.6);
+        }
+
+        /* Blockchain Visual */
+        .hero-visual {
+            position: relative;
+            animation: fadeIn 1s ease 0.6s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .blockchain-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cloud-icon {
+            width: 280px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(108, 92, 231, 0.2));
+            border-radius: 100px;
+            position: relative;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 0 60px rgba(0, 210, 255, 0.4), inset 0 0 40px rgba(0, 210, 255, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .cloud-icon::before,
+        .cloud-icon::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.3), rgba(108, 92, 231, 0.3));
+            border-radius: 50%;
+            border: 2px solid var(--secondary);
+        }
+
+        .cloud-icon::before {
+            width: 100px;
+            height: 100px;
+            top: -40px;
+            left: 40px;
+        }
+
+        .cloud-icon::after {
+            width: 120px;
+            height: 120px;
+            top: -50px;
+            right: 50px;
+        }
+
+        .blockchain-chain {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .chain-block {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            border: 2px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            box-shadow: 0 0 30px rgba(108, 92, 231, 0.6);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .chain-block:nth-child(1) { top: 10%; left: 50%; animation-delay: 0s; }
+        .chain-block:nth-child(2) { top: 25%; right: 10%; animation-delay: 0.3s; }
+        .chain-block:nth-child(3) { bottom: 25%; right: 10%; animation-delay: 0.6s; }
+        .chain-block:nth-child(4) { bottom: 10%; left: 50%; animation-delay: 0.9s; }
+        .chain-block:nth-child(5) { bottom: 25%; left: 10%; animation-delay: 1.2s; }
+        .chain-block:nth-child(6) { top: 25%; left: 10%; animation-delay: 1.5s; }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 30px rgba(108, 92, 231, 0.6);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 50px rgba(0, 210, 255, 0.8);
+            }
+        }
+
+        .chain-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform-origin: left center;
+        }
+
+        .shield-lock {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(0, 210, 255, 0.3));
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            border: 3px solid var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+            animation: shieldPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% {
+                box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 60px rgba(16, 185, 129, 0.9);
+            }
+        }
+
+        .lock-icon {
+            font-size: 36px;
+            color: var(--success);
+        }
+
+        .secure-badge {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid var(--success);
+            padding: 10px 24px;
+            border-radius: 24px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--success);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Features */
+        .features {
+            margin-top: 100px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(15, 15, 35, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            box-shadow: 0 12px 40px rgba(0, 210, 255, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--secondary);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+        body.light-theme {
+            --dark: #F3F4F6;
+            --darker: #FFFFFF;
+            --light: #1F2937;
+            --gray: #6B7280;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F3F4F6 100%);
+            color: #1F2937;
+        }
+
+        body.light-theme .bg-animation {
+            opacity: 0.08;
+        }
+
+        body.light-theme nav {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(108, 92, 231, 0.3);
+        }
+
+        body.light-theme .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        body.light-theme .cloud-icon {
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.3), rgba(108, 92, 231, 0.3));
+            box-shadow: 0 0 60px rgba(0, 210, 255, 0.3), inset 0 0 40px rgba(0, 210, 255, 0.15);
+        }
+
+        body.light-theme .cloud-icon::before,
+        body.light-theme .cloud-icon::after {
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.25), rgba(108, 92, 231, 0.25));
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <script>
+        // Apply theme on page load
+        (function() {
+            const savedTheme = localStorage.getItem('vaultixTheme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+            }
+        })();
+    </script>
+    
+    <div class="container">
+        <nav>
+            <div class="logo">VAULTIX</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dataowner.html">Data Owner</a></li>
+                <li><a href="datauser.html">Data User</a></li>
+                <li><a href="trustauthority.html">Trust Authority</a></li>
+                <li><a href="cloud.html">Cloud</a></li>
+                <li>
+                    <svg class="settings-icon" onclick="window.location.href='settings.html'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </li>
+            </ul>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Blockchain-Based Security for Cloud Data Storage</h1>
+                <p>Experience next-generation data protection with decentralized blockchain technology. Your data, encrypted and secured across distributed networks with immutable access control.</p>
+                <button class="cta-button" onclick="window.location.href='dataowner.html'">Get Started</button>
+            </div>
+
+            <div class="hero-visual">
+                <div class="blockchain-container">
+                    <div class="blockchain-chain">
+                        <div class="chain-block">⛓️</div>
+                        <div class="chain-block">⛓️</div>
+                        <div class="chain-block">⛓️</div>
+                        <div class="chain-block">⛓️</div>
+                        <div class="chain-block">⛓️</div>
+                        <div class="chain-block">⛓️</div>
+                    </div>
+                    <div class="cloud-icon"></div>
+                    <div class="shield-lock">
+                        <span class="lock-icon">🔒</span>
+                    </div>
+                    <div class="secure-badge">SECURED BY BLOCKCHAIN</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>Immutable Security</h3>
+                <p>Blockchain-backed access control ensures your data permissions are tamper-proof and transparent.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Granular Access Control</h3>
+                <p>Define precise read/write permissions for every file with cryptographic verification.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Decentralized Trust</h3>
+                <p>Trust Authority verification ensures legitimate access requests without central points of failure.</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

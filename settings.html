@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Vaultix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00D2FF;
+            --accent: #A855F7;
+            --dark: #0F0F23;
+            --darker: #0A0A15;
+            --light: #FFFFFF;
+            --gray: #9CA3AF;
+            --success: #10B981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme {
+            --dark: #F3F4F6;
+            --darker: #FFFFFF;
+            --light: #1F2937;
+            --gray: #6B7280;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F3F4F6 100%);
+            color: #1F2937;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px),
+                repeating-linear-gradient(90deg, transparent, transparent 2px, var(--primary) 2px, var(--primary) 4px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        nav {
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(108, 92, 231, 0.2);
+            border-radius: 16px;
+            padding: 20px 30px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(108, 92, 231, 0.2);
+        }
+
+        body.light-theme nav {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(108, 92, 231, 0.3);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        .settings-header {
+            margin-bottom: 40px;
+        }
+
+        .settings-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 42px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .settings-header p {
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        .settings-content {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        .settings-sidebar {
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            height: fit-content;
+        }
+
+        body.light-theme .settings-sidebar {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .sidebar-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--gray);
+        }
+
+        .sidebar-item:hover {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--secondary);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), rgba(0, 210, 255, 0.2));
+            color: var(--secondary);
+            border-left: 3px solid var(--secondary);
+        }
+
+        .settings-panel {
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        body.light-theme .settings-panel {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .panel-section {
+            display: none;
+        }
+
+        .panel-section.active {
+            display: block;
+        }
+
+        .panel-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: var(--secondary);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme input,
+        body.light-theme select {
+            background: rgba(243, 244, 246, 0.5);
+            color: #1F2937;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
+        }
+
+        input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .theme-toggle {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .theme-option {
+            flex: 1;
+            padding: 30px;
+            border: 2px solid rgba(108, 92, 231, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .theme-option:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .theme-option.active {
+            border-color: var(--secondary);
+            background: rgba(0, 210, 255, 0.1);
+        }
+
+        .theme-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .theme-name {
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .save-btn {
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(108, 92, 231, 0.4);
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(108, 92, 231, 0.6);
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid var(--secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .info-box p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1024px) {
+            .settings-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <div class="container">
+        <nav>
+            <div class="logo" onclick="window.location.href='index.html'">VAULTIX</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dataowner.html">Data Owner</a></li>
+                <li><a href="datauser.html">Data User</a></li>
+                <li><a href="trustauthority.html">Trust Authority</a></li>
+                <li><a href="cloud.html">Cloud</a></li>
+            </ul>
+        </nav>
+
+        <div class="settings-header">
+            <h1>Settings</h1>
+            <p>Manage your profile and preferences</p>
+        </div>
+
+        <div class="settings-content">
+            <div class="settings-sidebar">
+                <div class="sidebar-item active" onclick="showPanel('profile')">
+                    <span>👤</span>
+                    <span>Profile</span>
+                </div>
+                <div class="sidebar-item" onclick="showPanel('theme')">
+                    <span>🎨</span>
+                    <span>Theme</span>
+                </div>
+                <div class="sidebar-item" onclick="showPanel('security')">
+                    <span>🔒</span>
+                    <span>Security</span>
+                </div>
+                <div class="sidebar-item" onclick="showPanel('notifications')">
+                    <span>🔔</span>
+                    <span>Notifications</span>
+                </div>
+            </div>
+
+            <div class="settings-panel">
+                <!-- Profile Section -->
+                <div class="panel-section active" id="profile">
+                    <h2>Profile Information</h2>
+                    
+                    <div class="profile-avatar" id="profileAvatar">👤</div>
+                    
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="profileName" placeholder="Your Name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="profileEmail" placeholder="email@example.com" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" id="profileRole" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Account Created</label>
+                            <input type="text" id="accountCreated" disabled>
+                        </div>
+                        
+                        <button type="button" class="save-btn" onclick="saveProfile()">Save Changes</button>
+                    </form>
+                </div>
+
+                <!-- Theme Section -->
+                <div class="panel-section" id="theme">
+                    <h2>Appearance</h2>
+                    
+                    <label>Choose Theme</label>
+                    <div class="theme-toggle">
+                        <div class="theme-option active" id="darkTheme" onclick="setTheme('dark')">
+                            <div class="theme-icon">🌙</div>
+                            <div class="theme-name">Dark Mode</div>
+                            <p style="color: var(--gray); margin-top: 10px; font-size: 14px;">Easy on the eyes</p>
+                        </div>
+                        
+                        <div class="theme-option" id="lightTheme" onclick="setTheme('light')">
+                            <div class="theme-icon">☀️</div>
+                            <div class="theme-name">Light Mode</div>
+                            <p style="color: var(--gray); margin-top: 10px; font-size: 14px;">Clear and bright</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <p><strong>💡 Tip:</strong> Your theme preference is automatically saved and will be applied across all sessions.</p>
+                    </div>
+                </div>
+
+                <!-- Security Section -->
+                <div class="panel-section" id="security">
+                    <h2>Security Settings</h2>
+                    
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" placeholder="Enter current password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" placeholder="Enter new password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" placeholder="Confirm new password">
+                    </div>
+                    
+                    <button type="button" class="save-btn">Update Password</button>
+                    
+                    <div class="info-box" style="margin-top: 30px;">
+                        <p><strong>🔐 Security:</strong> All passwords are encrypted using industry-standard AES-256 encryption. Your data is protected with blockchain-verified access control.</p>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div class="panel-section" id="notifications">
+                    <h2>Notification Preferences</h2>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" checked style="width: auto; margin-right: 10px;">
+                            Email notifications for access requests
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" checked style="width: auto; margin-right: 10px;">
+                            Email notifications for file uploads
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" style="width: auto; margin-right: 10px;">
+                            Weekly activity summary
+                        </label>
+                    </div>
+                    
+                    <button type="button" class="save-btn">Save Preferences</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize
+        window.onload = function() {
+            loadUserProfile();
+            loadThemePreference();
+        };
+
+        function loadUserProfile() {
+            const user = JSON.parse(localStorage.getItem('vaultixUser'));
+            if (user) {
+                document.getElementById('profileName').value = user.name || '';
+                document.getElementById('profileEmail').value = user.email || '';
+                document.getElementById('profileRole').value = user.role === 'owner' ? 'Data Owner' : 'Data User';
+                document.getElementById('accountCreated').value = new Date(user.loginTime).toLocaleDateString();
+                
+                // Set avatar emoji based on role
+                const avatarEmoji = user.role === 'owner' ? '👤' : '👥';
+                document.getElementById('profileAvatar').textContent = avatarEmoji;
+            }
+        }
+
+        function saveProfile() {
+            const user = JSON.parse(localStorage.getItem('vaultixUser'));
+            const newName = document.getElementById('profileName').value;
+            
+            if (user) {
+                user.name = newName;
+                localStorage.setItem('vaultixUser', JSON.stringify(user));
+                alert('✅ Profile updated successfully!');
+            }
+        }
+
+        function showPanel(panelId) {
+            // Hide all panels
+            document.querySelectorAll('.panel-section').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // Remove active from all sidebar items
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected panel
+            document.getElementById(panelId).classList.add('active');
+            
+            // Mark sidebar item as active
+            event.currentTarget.classList.add('active');
+        }
+
+        function setTheme(theme) {
+            const body = document.body;
+            const darkOption = document.getElementById('darkTheme');
+            const lightOption = document.getElementById('lightTheme');
+            
+            if (theme === 'light') {
+                body.classList.add('light-theme');
+                darkOption.classList.remove('active');
+                lightOption.classList.add('active');
+            } else {
+                body.classList.remove('light-theme');
+                darkOption.classList.add('active');
+                lightOption.classList.remove('active');
+            }
+            
+            localStorage.setItem('vaultixTheme', theme);
+        }
+
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('vaultixTheme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            }
+        }
+    </script>
+</body>
+</html>
